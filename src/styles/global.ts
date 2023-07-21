@@ -1,4 +1,4 @@
-import { globalCss } from ".";
+import { globalCss } from "@/styles";
 
 export const GlobalStyles = globalCss({
   "*": {
@@ -7,8 +7,8 @@ export const GlobalStyles = globalCss({
     boxSizing: "border-box",
   },
   body: {
-    backgroundColor: '$gray900',
-    color: '$gray100',
+    backgroundColor: "$gray900",
+    color: "$gray100",
     "-webkit-font-smoothing": "antialiased",
   },
 
