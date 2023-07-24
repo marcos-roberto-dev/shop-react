@@ -79,25 +79,33 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
   params,
 }) => {
-  const productId = params.id;
+  try {
+    const productId = params.id;
+    const product = await stripe.products.retrieve(productId, {
+      expand: ["default_price"],
+    });
 
-  const product = await stripe.products.retrieve(productId, {
-    expand: ["default_price"],
-  });
+    const price = product.default_price as Stripe.Price;
 
-  const price = product.default_price as Stripe.Price;
-
-  return {
-    props: {
-      product: {
-        id: product.id,
-        name: product.name,
-        imageUrl: product.images[0],
-        price: price.unit_amount,
-        description: product.description,
-        defaultPriceId: price.id,
+    return {
+      props: {
+        product: {
+          id: product.id,
+          name: product.name,
+          imageUrl: product.images[0],
+          price: price.unit_amount,
+          description: product.description,
+          defaultPriceId: price.id,
+        },
       },
-    },
-    revalidate: 60 * 60 * 1,
-  };
+      revalidate: 60 * 60 * 1,
+    };
+  } catch {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 };
