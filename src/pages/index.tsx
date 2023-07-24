@@ -7,6 +7,7 @@ import Stripe from "stripe";
 import { HomeContainer, Product } from "@/styles/pages/home";
 import { stripe } from "@/lib/stripe";
 import { formmateCurrencyBRL } from "@/utils/formatter";
+import Link from "next/link";
 
 interface Product {
   id: string;
@@ -30,20 +31,22 @@ export default function Home({ products }: HomeProps) {
   return (
     <HomeContainer ref={sliderRef} className="keen-slider">
       {products.map((product) => (
-        <Product key={product.id} className="keen-slider__slide">
-          <Image
-            placeholder={"blur"}
-            blurDataURL={product.imageUrl}
-            src={product.imageUrl}
-            width={520}
-            height={520}
-            alt={product.name}
-          />
-          <footer>
-            <strong>{product.name}</strong>
-            <span>{formmateCurrencyBRL(product.price)}</span>
-          </footer>
-        </Product>
+        <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
+          <Product className="keen-slider__slide">
+            <Image
+              placeholder={"blur"}
+              blurDataURL={product.imageUrl}
+              src={product.imageUrl}
+              width={520}
+              height={520}
+              alt={product.name}
+            />
+            <footer>
+              <strong>{product.name}</strong>
+              <span>{formmateCurrencyBRL(product.price)}</span>
+            </footer>
+          </Product>
+        </Link>
       ))}
     </HomeContainer>
   );
