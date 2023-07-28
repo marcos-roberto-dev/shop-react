@@ -3,11 +3,14 @@ import { useKeenSlider } from "keen-slider/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
 import Stripe from "stripe";
-
+import { Handbag } from "phosphor-react";
 import { HomeContainer, Product } from "@/styles/pages/home";
 import { stripe } from "@/lib/stripe";
 import { formmateCurrencyBRL } from "@/utils/formatter";
 import Link from "next/link";
+import { ShoppingCartButton } from "@/styles/pages/app";
+import { MouseEvent } from "react";
+import { shoppingCartStore } from "@/store/shoppingCart";
 
 interface Product {
   id: string;
@@ -28,6 +31,13 @@ export default function Home({ products }: HomeProps) {
     },
   });
 
+  const add = shoppingCartStore((store) => store.add);
+
+  function handleAddProductInShoppingCart(event: MouseEvent, product: any) {
+    event.preventDefault();
+    add({ ...product, qnt: 1 });
+  }
+
   return (
     <HomeContainer ref={sliderRef} className="keen-slider">
       {products.map((product) => (
@@ -42,8 +52,18 @@ export default function Home({ products }: HomeProps) {
               alt={product.name}
             />
             <footer>
-              <strong>{product.name}</strong>
-              <span>{formmateCurrencyBRL(product.price)}</span>
+              <div>
+                <strong>{product.name}</strong>
+                <span>{formmateCurrencyBRL(product.price)}</span>
+              </div>
+              <ShoppingCartButton
+                product
+                onClick={(event) =>
+                  handleAddProductInShoppingCart(event, product)
+                }
+              >
+                <Handbag size={24} />
+              </ShoppingCartButton>
             </footer>
           </Product>
         </Link>
@@ -64,6 +84,7 @@ export const getStaticProps: GetStaticProps = async () => {
       name: product.name,
       imageUrl: product.images[0],
       price: price.unit_amount,
+      defaultPriceId: price.id,
     };
   });
 

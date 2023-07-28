@@ -1,6 +1,6 @@
 import { GetStaticProps, GetStaticPaths } from "next";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Stripe from "stripe";
 import axios from "axios";
 
@@ -74,13 +74,6 @@ export default function Product({ product }: ProductProps) {
         <p>{product.description}</p>
 
         <button onClick={handleAddProductInShoppingCart}>
-          Colocar na sacola
-        </button>
-
-        <button
-          disabled={isCreatingCheckoutSession}
-          onClick={handleCheckoutProducts}
-        >
           Colocar na sacola
         </button>
       </ProductDetails>

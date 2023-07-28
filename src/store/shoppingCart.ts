@@ -14,11 +14,13 @@ interface ShoppingCartStore {
   cart: ProductStore[];
   add: (product: ProductStore) => void;
   remove: (id: string) => void;
+  getQntShoppingCart: () => number;
 }
 
 export const shoppingCartStore = create<ShoppingCartStore>((set, get) => {
   return {
     cart: [],
+
     add(product) {
       const { cart } = get();
       const productInShoppingCartIndex = cart.findIndex(
@@ -51,6 +53,12 @@ export const shoppingCartStore = create<ShoppingCartStore>((set, get) => {
 
         set({ cart });
       }
+    },
+
+    getQntShoppingCart() {
+      return get().cart.reduce((act, product) => {
+        return act + product.qnt;
+      }, 0);
     },
   };
 });
