@@ -1,6 +1,6 @@
 import { GetStaticProps, GetStaticPaths } from "next";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Stripe from "stripe";
 import axios from "axios";
 
@@ -12,6 +12,7 @@ import {
   ProductContainer,
   ProductDetails,
 } from "@/styles/pages/product";
+import { shoppingCartStore } from "@/store/shoppingCart";
 
 interface ProductProps {
   product: {
@@ -27,11 +28,18 @@ interface ProductProps {
 export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false);
-  async function handleBuyProduct() {
+  const add = shoppingCartStore((store) => store.add);
+
+  const cart = shoppingCartStore((store) => store.cart);
+  function handleAddProductInShoppingCart() {
+    add({ ...product, qnt: 1 });
+  }
+
+  async function buyProducts() {
     try {
       setIsCreatingCheckoutSession(true);
       const response = await axios.post("/api/checkout", {
-        priceId: product.defaultPriceId,
+        cart,
       });
 
       const { checkoutUrl } = response.data;
@@ -42,6 +50,10 @@ export default function Product({ product }: ProductProps) {
     } finally {
       setIsCreatingCheckoutSession(false);
     }
+  }
+
+  function handleCheckoutProducts() {
+    buyProducts();
   }
 
   return (
@@ -61,8 +73,15 @@ export default function Product({ product }: ProductProps) {
 
         <p>{product.description}</p>
 
-        <button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>
-          Comprar agora
+        <button onClick={handleAddProductInShoppingCart}>
+          Colocar na sacola
+        </button>
+
+        <button
+          disabled={isCreatingCheckoutSession}
+          onClick={handleCheckoutProducts}
+        >
+          Colocar na sacola
         </button>
       </ProductDetails>
     </ProductContainer>

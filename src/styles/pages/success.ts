@@ -36,19 +36,25 @@ export const SuccessContainer = styled("main", {
   },
 });
 
+export const calculateLeft = (index) => {
+  return `calc(${index * -50}px)`;
+};
+
 export const ImageContainer = styled("div", {
-  width: "100%",
-  maxWidth: 130,
-  height: 145,
+  width: "8.75rem",
+  height: "8.75rem",
+
   background: "linear-gradient(188deg, #1ea483 0%, #7465d4 100%)",
-  borderRadius: 8,
   padding: "0.25rem",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  borderRadius: "100000px",
   marginTop: "4rem",
+  boxShadow: "0px 0px 60px 0px rgba(0, 0, 0, 0.80)",
+});
 
-  img: {
-    objectFit: "cover",
-  },
+export const ImagesContainer = styled("div", {
+  display: "flex",
+  position: "relative",
 });
