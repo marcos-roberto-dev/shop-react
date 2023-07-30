@@ -26,34 +26,10 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false);
   const add = shoppingCartStore((store) => store.add);
 
-  const cart = shoppingCartStore((store) => store.cart);
   function handleAddProductInShoppingCart() {
     add({ ...product, qnt: 1 });
-  }
-
-  async function buyProducts() {
-    try {
-      setIsCreatingCheckoutSession(true);
-      const response = await axios.post("/api/checkout", {
-        cart,
-      });
-
-      const { checkoutUrl } = response.data;
-
-      window.location.href = checkoutUrl;
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsCreatingCheckoutSession(false);
-    }
-  }
-
-  function handleCheckoutProducts() {
-    buyProducts();
   }
 
   return (

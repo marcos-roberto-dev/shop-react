@@ -15,6 +15,7 @@ interface ShoppingCartStore {
   add: (product: ProductStore) => void;
   remove: (id: string) => void;
   getQntShoppingCart: () => number;
+  getTotalShoppingCart: () => number;
 }
 
 export const shoppingCartStore = create<ShoppingCartStore>((set, get) => {
@@ -58,6 +59,12 @@ export const shoppingCartStore = create<ShoppingCartStore>((set, get) => {
     getQntShoppingCart() {
       return get().cart.reduce((act, product) => {
         return act + product.qnt;
+      }, 0);
+    },
+
+    getTotalShoppingCart() {
+      return get().cart.reduce((act, product) => {
+        return act + product.price;
       }, 0);
     },
   };
