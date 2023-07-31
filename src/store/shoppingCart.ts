@@ -64,7 +64,7 @@ export const shoppingCartStore = create<ShoppingCartStore>((set, get) => {
 
     getTotalShoppingCart() {
       return get().cart.reduce((act, product) => {
-        return act + product.price;
+        return act + product.price * product.qnt;
       }, 0);
     },
   };

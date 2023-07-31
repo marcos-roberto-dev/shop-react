@@ -88,7 +88,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
       },
       revalidate: 60 * 60 * 1,
     };
-  } catch {
+  } catch (e) {
     return {
       redirect: {
         destination: "/",
